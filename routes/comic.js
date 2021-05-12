@@ -3,12 +3,15 @@ const axios = require("axios");
 const router = express.Router();
 
 const KEY = process.env.PRIVATE_KEY;
+const LIMIT = 100;
 
 // List comics
 router.get("/comics", async (req, res) => {
   try {
+    const page = req.query.page;
+    const skip = LIMIT * (page - 1);
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${KEY}`
+      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${KEY}&limit=${LIMIT}&skip=${skip}`
     );
 
     res.status(200).json(response.data);

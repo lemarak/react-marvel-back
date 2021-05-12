@@ -9,7 +9,7 @@ router.get("/characters", async (req, res) => {
   try {
     const page = req.query.page;
     const skip = LIMIT * (page - 1);
-    console.log("page", page);
+
     const response = await axios.get(
       `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${KEY}&limit=${LIMIT}&skip=${skip}`
     );
