@@ -1,12 +1,18 @@
 const express = require("express");
 const formidable = require("express-formidable");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 require("dotenv").config();
 
 const app = express();
 app.use(formidable());
 app.use(cors());
+
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 // Routes
 const characterRoutes = require("./routes/character");
@@ -15,7 +21,10 @@ const comicRoutes = require("./routes/comic");
 app.use(comicRoutes);
 const searchRoutes = require("./routes/search");
 app.use(searchRoutes);
+const userRoutes = require("./routes/user");
+app.use(userRoutes);
 
+// Home back end
 app.get("/", (req, res) => {
   try {
     res.status(200).json({ message: "Bienvenue sur l'API Marvel" });
