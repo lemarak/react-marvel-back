@@ -13,6 +13,8 @@ const characterRoutes = require("./routes/character");
 app.use(characterRoutes);
 const comicRoutes = require("./routes/comic");
 app.use(comicRoutes);
+const searchRoutes = require("./routes/search");
+app.use(searchRoutes);
 
 app.get("/", (req, res) => {
   try {
