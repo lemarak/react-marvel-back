@@ -1,6 +1,8 @@
 const express = require("express");
 const axios = require("axios");
+
 const User = require("../models/User");
+
 const router = express.Router();
 
 const KEY = process.env.PRIVATE_KEY;
@@ -49,10 +51,13 @@ router.get("/comic/add-favorites/:token/:comicId", async (req, res) => {
 
     const user = await User.findOne({ token: token });
     if (user) {
-      user.favoritesComics.push(comicId);
-      await user.save();
+      if (user.favoritesComics.indexOf(comicId) === -1) {
+        user.favoritesComics.push(comicId);
+        await user.save();
+      }
+      res.status(200).json({ message: "add comics in favorites" });
     } else {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "User not found - token : " + token });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });

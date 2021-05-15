@@ -1,5 +1,8 @@
 const express = require("express");
 const axios = require("axios");
+
+const User = require("../models/User");
+
 const router = express.Router();
 
 const KEY = process.env.PRIVATE_KEY;
@@ -20,15 +23,18 @@ router.get("/characters", async (req, res) => {
 });
 
 // Add characters to user's favorites
-router.get("/comic/add-favorites/:token/:characterId", async (req, res) => {
+router.get("/character/add-favorites/:token/:characterId", async (req, res) => {
   try {
     const token = req.params["token"];
     const characterId = req.params["characterId"];
 
     const user = await User.findOne({ token: token });
     if (user) {
-      user.favoritesCharacters.push(characterId);
-      await user.save();
+      if (user.favoritesCharacters.indexOf(characterId) === -1) {
+        user.favoritesCharacters.push(characterId);
+        await user.save();
+      }
+      res.status(200).json({ message: "add character in favorites" });
     } else {
       res.status(404).json({ message: "User not found" });
     }
