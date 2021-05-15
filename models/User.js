@@ -12,6 +12,8 @@ const User = mongoose.model("User", {
   token: String,
   hash: String,
   salt: String,
+  favoritesCharacters: { type: [String], default: [] },
+  favoritesComics: { type: [String], default: [] },
 });
 
 module.exports = User;

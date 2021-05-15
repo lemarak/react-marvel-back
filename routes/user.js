@@ -10,13 +10,13 @@ const User = require("../models/User");
 router.post("/user/signup", async (req, res) => {
   console.log("Je passe dans signup");
   try {
+    const { email, username, password } = req.fields;
     // Etape1 : vérifier qu'il n'y a pas déjà un user qui possède cet email
     const userEmail = await User.findOne({ email: email });
     if (userEmail) {
       res.status(403).json({ message: "email exists" });
     }
 
-    const { email, username, password } = req.fields;
     // Etape2 : vérifier qu'il n'y a pas déjà un user qui possède ce nom
     const userUserName = await User.findOne({ username: username });
     if (userUserName) {
