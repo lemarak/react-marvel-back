@@ -14,12 +14,12 @@ router.post("/user/signup", async (req, res) => {
     // Etape1 : vérifier qu'il n'y a pas déjà un user qui possède ce nom
     const userUserName = await User.findOne({ username: username });
     if (userUserName) {
-      res.status(403).json({ message: "This username already exists" });
+      res.status(403).json({ message: "username exists" });
     }
     // Etape2 : vérifier qu'il n'y a pas déjà un user qui possède cet email
     const userEmail = await User.findOne({ email: email });
     if (userEmail) {
-      res.status(403).json({ message: "This email already exists" });
+      res.status(403).json({ message: "email exists" });
     }
     // Etape 3 : vérifier que les champs nécessaires sont requis
     if (!email || !username || !password) {
