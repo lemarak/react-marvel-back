@@ -78,4 +78,25 @@ router.post("/user/login", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// get user
+router.get("/user", async (req, res) => {
+  const token = req.query["token"];
+  try {
+    const user = await User.findOne({ token: token });
+    if (user) {
+      res.status(200).json({
+        _id: user._id,
+        token: user.token,
+        favoritesCharacters: user.favoritesCharacters,
+        favoritesComics: user.favoritesComics,
+      });
+    } else {
+      res.status(404).json({ message: "No user" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
