@@ -12,9 +12,10 @@ const LIMIT = 100;
 router.get("/comics", async (req, res) => {
   try {
     const page = req.query.page;
+    const title = req.query.title;
     const skip = LIMIT * (page - 1);
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${KEY}&limit=${LIMIT}&skip=${skip}`
+      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${KEY}&limit=${LIMIT}&skip=${skip}&title=${title}`
     );
 
     res.status(200).json(response.data);

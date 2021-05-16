@@ -11,11 +11,19 @@ const LIMIT = 100;
 router.get("/characters", async (req, res) => {
   try {
     const page = req.query.page;
+    const name = req.query.name;
     const skip = LIMIT * (page - 1);
 
-    const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${KEY}&limit=${LIMIT}&skip=${skip}`
-    );
+    let response;
+    if (name) {
+      response = await axios.get(
+        `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${KEY}&limit=${LIMIT}&skip=${skip}&name=${name}`
+      );
+    } else {
+      response = await axios.get(
+        `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${KEY}&limit=${LIMIT}&skip=${skip}`
+      );
+    }
     res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -52,7 +60,7 @@ router.get(
   }
 );
 
-// get one comic
+// get one character
 router.get("/character/:characterId", async (req, res) => {
   try {
     const characterId = req.params["characterId"];
