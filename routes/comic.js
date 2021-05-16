@@ -40,29 +40,34 @@ router.get("/comic/:comicId", async (req, res) => {
   }
 });
 
-// Add comic to user's favorites
-router.get("/comic/add-favorites/:token/:comicId", async (req, res) => {
-  try {
-    const token = req.params["token"];
-    const comicId = req.params["comicId"];
+// Admin comics to user's favorites
+router.get(
+  "/comic/admin-favorites/:token/:comicId/:action",
+  async (req, res) => {
+    try {
+      const token = req.params["token"];
+      const comicId = req.params["comicId"];
+      const action = req.params["action"];
 
-    console.log("token : ", token);
-    console.log("comic id : ", comicId);
-
-    const user = await User.findOne({ token: token });
-    if (user) {
-      if (user.favoritesComics.indexOf(comicId) === -1) {
-        user.favoritesComics.push(comicId);
-        await user.save();
+      const user = await User.findOne({ token: token });
+      if (user) {
+        const indexComic = user.favoritesComics.indexOf(comicId);
+        if (action === "add" && indexComic === -1) {
+          user.favoritesComics.push(comicId);
+          await user.save();
+        } else if (action === "remove" && indexComic !== -1) {
+          user.favoritesComics.splice(indexComic, 1);
+          await user.save();
+        }
+        res.status(200).json({ favoritesComics: user.favoritesComics });
+      } else {
+        res.status(404).json({ message: "User not found" });
       }
-      res.status(200).json({ message: "add comics in favorites" });
-    } else {
-      res.status(404).json({ message: "User not found - token : " + token });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
-});
+);
 
 // List comics for a character
 router.get("/comics/:characterId", async (req, res) => {
