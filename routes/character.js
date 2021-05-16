@@ -33,8 +33,9 @@ router.get("/character/add-favorites/:token/:characterId", async (req, res) => {
       if (user.favoritesCharacters.indexOf(characterId) === -1) {
         user.favoritesCharacters.push(characterId);
         await user.save();
+        console.log(characterId);
       }
-      res.status(200).json({ message: "add character in favorites" });
+      res.status(200).json({ favoritesCharacters: user.favoritesCharacters });
     } else {
       res.status(404).json({ message: "User not found" });
     }
