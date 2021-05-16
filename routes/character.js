@@ -52,4 +52,22 @@ router.get(
   }
 );
 
+// get one comic
+router.get("/character/:characterId", async (req, res) => {
+  try {
+    const characterId = req.params["characterId"];
+    const response = await axios.get(
+      `https://lereacteur-marvel-api.herokuapp.com/character/${characterId}?apiKey=${KEY}`
+    );
+    if (response.data) {
+      res.status(200).json(response.data);
+      console.log(response.data);
+    } else {
+      res.status(404).json({ message: "Character not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
